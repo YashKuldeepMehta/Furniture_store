@@ -1,0 +1,128 @@
+
+.navbar {
+  background-color: rgb(211, 194, 194);
+  border-bottom: 1px solid #ddd;
+  padding: 18px 30px;
+  font-family: Arial, sans-serif;
+  z-index: 10;
+}
+
+.navbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar-logo {
+  font-size: 24px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+
+
+.navbar-menu {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-item {
+  position: relative;
+  cursor: pointer;
+}
+
+.navbar-link {
+  text-decoration: none;
+  color: #444;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.navbar-item.dropdown{
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0; 
+  min-width: 100%;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 5px 10px;
+  border-radius: 4px;
+  z-index: 12;
+  
+}
+
+
+.dropdown-menu li {
+  padding: 10px 16px;
+  color: #333;
+  font-size: 14px;
+  transition: background 0.2s ease;
+  list-style: none;
+}
+
+.dropdown-menu li:hover {
+  background-color: #f5f5f5;
+}
+
+.login-dropdown-menu{
+  max-height: 0;
+  transition: max-height 1s ease, opacity 1s ease;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  min-width: 100px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 5px;
+  border-radius: 4px;
+  z-index: 12;
+}
+
+.login-dropdown-menu.open {
+  max-height: 300px; 
+  opacity: 1;
+}
+
+.login-dropdown-menu li {
+  padding: 10px 16px;
+  color: #333;
+  font-size: 14px;
+  transition: background 0.2s ease;
+  list-style: none;
+}
+
+.login-dropdown-menu li:hover {
+  background-color: #f5f5f5;
+}
+
+.logout-link{
+position: relative;
+cursor: pointer;
+text-decoration: none;
+  color: #444;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.cart-link{
+position: relative;
+cursor: pointer;
+text-decoration: none;
+  color: #444;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+
+
