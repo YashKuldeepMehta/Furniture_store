@@ -16,7 +16,7 @@ const CartDialog = ({ onClose }) => {
         let cancelled = false
         const fetchCartItems = async () => {
             try {
-                const res = await axios.post("http://localhost:5000/api/fetchcart", {}, { headers: { Authorization: token, 'Content-Type': 'application/json' } })
+                const res = await axios.post("https://furniture-store-backend-ucad.onrender.com/api/fetchcart", {}, { headers: { Authorization: token, 'Content-Type': 'application/json' } })
                 if (!cancelled) {
                     setCartItems(res.data.items)
                 }
@@ -36,13 +36,13 @@ const CartDialog = ({ onClose }) => {
 
     const HandleQuantityUpdate = async (productId, quantity) => {
         try {
-            const res = await axios.put("http://localhost:5000/api/updatecartquantity", { productId, quantity }, { headers: { Authorization: token, 'Content-Type': 'application/json' } })
+            const res = await axios.put("https://furniture-store-backend-ucad.onrender.com/api/updatecartquantity", { productId, quantity }, { headers: { Authorization: token, 'Content-Type': 'application/json' } })
 
             if (res.status === 200) {
                 if(!toast.isActive("cart-update")){
                 toast.success(res.data.message, { toastId:"cart-update",position: "top-center", autoClose: 1000 })
                 }
-                const updatedCart = await axios.post("http://localhost:5000/api/fetchcart", {},
+                const updatedCart = await axios.post("https://furniture-store-backend-ucad.onrender.com/api/fetchcart", {},
                     { headers: { Authorization: token, 'Content-Type': 'application/json' } });
                 if (updatedCart.status === 200) {
                     setCartItems(updatedCart.data.items);
@@ -61,12 +61,12 @@ const CartDialog = ({ onClose }) => {
 
     const RemoveItemFromCart = async (productId) => {
         try {
-            const res = await axios.delete(`http://localhost:5000/api/removeitem/${productId}`,
+            const res = await axios.delete(`https://furniture-store-backend-ucad.onrender.com/api/removeitem/${productId}`,
                 { headers: { Authorization: token, 'Content-Type': 'application/json' } })
 
             if (res.status === 200) {
                 toast.success(res.data.message, { position: 'top-center', autoClose: 1000 })
-                const updatedCart = await axios.post("http://localhost:5000/api/fetchcart", {},
+                const updatedCart = await axios.post("https://furniture-store-backend-ucad.onrender.com/api/fetchcart", {},
                     { headers: { Authorization: token, 'Content-Type': 'application/json' } });
                 if (updatedCart.status === 200) {
                     setCartItems(updatedCart.data.items);
