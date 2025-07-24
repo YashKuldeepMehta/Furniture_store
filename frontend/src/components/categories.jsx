@@ -32,7 +32,7 @@ const CategoryProducts = () => {
         let cancelled = false
         const fetchproducts = async () => {
             try {
-                const result = await axios.post('http://localhost:5000/api/categorywiseproducts', { category }, {
+                const result = await axios.post('https://furniture-store-backend-ucad.onrender.com/api/categorywiseproducts', { category }, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -71,7 +71,7 @@ const CategoryProducts = () => {
     const HandleAddtoCart = async () => {
         const token = localStorage.getItem("token")
         try {
-            const res = await axios.post("http://localhost:5000/api/addtocart", { productId: selectedProduct._id, quantity: quantity, name: selectedProduct.name, price: selectedProduct.price, image: selectedProduct.image }, { headers:{ Authorization : token, 'Content-Type':'application/json'}})
+            const res = await axios.post("https://furniture-store-backend-ucad.onrender.com/api/addtocart", { productId: selectedProduct._id, quantity: quantity, name: selectedProduct.name, price: selectedProduct.price, image: selectedProduct.image }, { headers:{ Authorization : token, 'Content-Type':'application/json'}})
 
             if(res.status === 200){
                 toast.success(res.data.message,{position: "top-center", autoClose: 1500})
