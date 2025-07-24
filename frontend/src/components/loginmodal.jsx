@@ -20,7 +20,7 @@ const LoginModal = ({setShowLoginModal}) => {
             return;
         }
         try {
-            const result = await axios.post("http://localhost:5000/api/login", { email, password })
+            const result = await axios.post("https://furniture-store-backend-ucad.onrender.com/api/login", { email, password })
             if (result.status === 200) {
                 login(result.data.token);
                 setShowLoginModal(false);
