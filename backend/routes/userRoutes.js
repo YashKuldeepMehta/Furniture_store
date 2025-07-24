@@ -6,7 +6,9 @@ const Product = require('../models/products');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Cart = require('../models/cart')
+const Order = require("../models/orders")
 const auth = require('../middleware/auth')
+const SendOrderConfirmationMail = require("../utils/sendMail")
 
 
 router.get("/", (req, res) => {
@@ -149,9 +151,24 @@ router.delete('/removeitem/:productId',auth,async(req,res) =>{
 
         cart.items = cart.items.filter((i) => i.productId.toString() !== productId)
         await cart.save()
-        res.status(200).json({message:"Itemm removed from cart"})
+        res.status(200).json({message:"Item removed from cart"})
     }catch(error){
         res.status(500).json({error:"Server error"})
+    }
+})
+
+router.post("/placeholder",auth,async(req,res) =>{
+    try{
+        const {name,email,phone,address,paymentMethod,paymentDetails,cartItems,totalamount} = req.body
+        const neworder = new Order({userId:req.user.id,name,email,phone,address,paymentMethod,paymentDetails,cartItems,totalamount,orderStatus:"pending"})
+
+        await neworder.save()
+        await Cart.deleteOne({userId:req.user.id})
+        res.status(200).json({message:"Order placed successfully"})
+        await SendOrderConfirmationMail(email,neworder)
+        
+    }catch(error){
+        res.status(500).json({error:"Failed to place order"})
     }
 })
 

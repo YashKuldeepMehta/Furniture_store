@@ -3,9 +3,12 @@ import { toast } from 'react-toastify'
 import useCart from './cartstore'
 import Navbar from './navbar'
 import "../styles/checkout.css"
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const Checkout = () => {
-    const { cartItems } = useCart()
+    const { cartItems,clearCart } = useCart()
+    const navigate = useNavigate()
     const [formdata, setFormData] = useState({
         name: '',
         email: '',
@@ -19,7 +22,7 @@ const Checkout = () => {
         },
         paymentMethod: '',
         card: {
-            name: '',
+            cardName: '',
             cardNumber: '',
             cvv: ''
         },
@@ -70,7 +73,36 @@ const Checkout = () => {
    }
 
 
-    const PlaceOrder = () => {}
+    const PlaceOrder = async () => {
+        const token = localStorage.getItem("token")
+        const payload = {
+            name : formdata.name,
+            email : formdata.email,
+            phone : formdata.phone,
+            address : formdata.address,
+            paymentMethod : formdata.paymentMethod,
+            paymentDetails : formdata.paymentMethod === "card" ? formdata.card : formdata.paymentMethod === "upi" ? formdata.upi : {},
+            cartItems : cartItems,
+            totalamount : totalamount
+        }
+        console.log(payload)
+
+        try{
+            const res = await axios.post("http://localhost:5000/api/placeholder",payload,{ headers: { Authorization: token, 'Content-Type': 'application/json' } })
+
+            if(res.status === 200){
+                toast.success(res.data.message,{position:"top-center", autoClose:1500})
+                setShowPaymentDialog(false)
+                clearCart()
+                navigate("/")
+                
+            }
+        }catch(err){
+            if(err.response && err.response.data && err.response.data.error){
+                toast.error(err.response.data.error,{position:"top-center",autoClose:1500})
+            }
+        }
+    }
 
     const HandleSubmit = async (e) =>{
         e.preventDefault();
@@ -139,13 +171,13 @@ const Checkout = () => {
 
                    {showpaymentdialog && (
                     <div className='payment-dialog-overlay' onClick={() => setShowPaymentDialog(false)}>
-                        <div className='payment-dialog-content'>
+                        <div className='payment-dialog-content' onClick={(e) => e.stopPropagation()}>
                             <h3>{formdata.paymentMethod === "card" ? "Enter Card Details" : "Enter UPI Id"}</h3>
 
                             {formdata.paymentMethod === "card" && (
                                 <>
-                                <input type="text" name="name" placeholder='Enter Card Holder Name' onChange={HandleValueChange} required/>
-                                <input type="text" name="cardName" placeholder='Enter Card Number' onChange={HandleValueChange} required/>
+                                <input type="text" name="cardName" placeholder='Enter Card Holder Name' onChange={HandleValueChange} required/>
+                                <input type="text" name="cardNumber" placeholder='Enter Card Number' onChange={HandleValueChange} required/>
                                 <input type="password" name="cvv" placeholder='Enter CVV' onChange={HandleValueChange} maxLength={3} required/>
                                 </>
                             )}

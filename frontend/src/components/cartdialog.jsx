@@ -18,14 +18,7 @@ const CartDialog = ({ onClose }) => {
             try {
                 const res = await axios.post("http://localhost:5000/api/fetchcart", {}, { headers: { Authorization: token, 'Content-Type': 'application/json' } })
                 if (!cancelled) {
-                    if (res.status === 200) {
-                        if (res.data.items.length === 0) {
-                            toast.error("Cart is empty", { position: "top-center", autoClose: 1000 })
-                        }
-                        else {
-                            setCartItems(res.data.items)
-                        }
-                    }
+                    setCartItems(res.data.items)
                 }
             }
             catch (err) {
@@ -38,7 +31,7 @@ const CartDialog = ({ onClose }) => {
         return (() => {
             cancelled = true
         })
-    }, [])
+    }, [cartItems])
 
 
     const HandleQuantityUpdate = async (productId, quantity) => {
@@ -46,7 +39,9 @@ const CartDialog = ({ onClose }) => {
             const res = await axios.put("http://localhost:5000/api/updatecartquantity", { productId, quantity }, { headers: { Authorization: token, 'Content-Type': 'application/json' } })
 
             if (res.status === 200) {
-                toast.success(res.data.message, { position: "top-center", autoClose: 1000 })
+                if(!toast.isActive("cart-update")){
+                toast.success(res.data.message, { toastId:"cart-update",position: "top-center", autoClose: 1000 })
+                }
                 const updatedCart = await axios.post("http://localhost:5000/api/fetchcart", {},
                     { headers: { Authorization: token, 'Content-Type': 'application/json' } });
                 if (updatedCart.status === 200) {
@@ -95,6 +90,7 @@ const CartDialog = ({ onClose }) => {
                 {cartItems.length === 0 ? (
                     <p className='empty-cart'>Your cart is empty</p>
                 ) : (
+                    <>
                     <div className='cart-list'>
                         {cartItems.map(item => (
                             <div className='cart-item' key={item.productId}>
@@ -116,11 +112,12 @@ const CartDialog = ({ onClose }) => {
                             </div>
                         ))}
                     </div>
-                )}
-
-                <button type='button' onClick={()=> {
+                    <button type='button' onClick={()=> {
                     onClose();
                     navigate("/checkout")}} >Checkout</button>
+                    </>                   
+                )}
+
             </div>
         </div>
     )

@@ -5,7 +5,8 @@ const useCart = create(
   persist(
     (set) => ({
       cartItems: [],
-      setCartItems: (items) => set({ cartItems: items })
+      setCartItems: (items) => set({ cartItems: items }),
+      clearCart: () => set({ cartItems: [] })
     }),
     {
       name: 'cart-storage', 
