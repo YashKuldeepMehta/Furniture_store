@@ -88,7 +88,7 @@ const Checkout = () => {
         console.log(payload)
 
         try{
-            const res = await axios.post("http://localhost:5000/api/placeholder",payload,{ headers: { Authorization: token, 'Content-Type': 'application/json' } })
+            const res = await axios.post("https://furniture-store-backend-ucad.onrender.com/api/placeholder",payload,{ headers: { Authorization: token, 'Content-Type': 'application/json' } })
 
             if(res.status === 200){
                 toast.success(res.data.message,{position:"top-center", autoClose:1500})
